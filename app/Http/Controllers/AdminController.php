@@ -264,14 +264,24 @@ class AdminController extends Controller
             'nurse2'  => $request->nurse2,
             'nursefloor2'  => $request->nursefloor2,
         ];
-        $validatedData = $request->validate([
-            // Define your validation rules here
-        ]);
+       
         try{
             $datas = array(
                 'name'=> $rules['hca1'], 
             );
-           //HCA
+            // Check if a record for the same date and shift type already exists
+            $existingRecord = Schedule::where('date', $rules['date'])
+            ->where('shift_type', $rules['shift_type'])
+            ->first();
+
+            if ($existingRecord) {
+                // A record for this date and shift type already exists
+                return redirect()->back()->with('error', 'A schedule already exists for this date and shift type.');
+            }
+
+            Schedule::create($request->all());
+
+           //Email HCA
             $emailhca1 = Hca::where('fullname', $rules['hca1'])->get();
             foreach ($emailhca1 as $hca) {
                 $email = $hca->email;
@@ -383,7 +393,7 @@ class AdminController extends Controller
         //         ->withErrors($validatedData)
         //         ->withInput();
         // }
-        Schedule::create($request->all());
+       
         
 
         return redirect()->route('admin.shifts')->with('success', 'Schedule created successfully.');  

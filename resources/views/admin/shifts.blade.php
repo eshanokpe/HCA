@@ -68,7 +68,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          @foreach ($schedules as $schedule)
+                          @forelse ($schedules as $schedule)
                           <tr> 
                               @if ( $schedule->shift_type == 'Morning')
                               <td> Morning</td>
@@ -88,6 +88,10 @@
                             <td class="align-middle">
                               <a href="{{ route('admin.editnurse', $schedule->id )}}" 
                                 class="btn btn-danger font-weight-bold">
+                                Edit
+                              </a>
+                              <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                                class="btn btn-danger font-weight-bold">
                                 Delete
                               </a>
                             </td>
@@ -103,7 +107,9 @@
                          
                           
                           </tr>
-                          @endforeach
+                          @empty
+                            <p class="text-danger pr-3" >No Data Found</p>
+                          @endforelse
                         </tbody>
                       </table>
 
