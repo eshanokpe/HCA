@@ -34,11 +34,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                  @foreach ($hcas as $hca)
+                  @php $serial = 1 @endphp
+                  @forelse ($hcas as $hca)
                     <tr>
                       <td>
                         <div class="d-flex flex-column justify-content-center text-center">
-                            <p class="text-xs font-weight-bold mb-0">{{ $hca->id }}</p>
+                            <p class="text-xs font-weight-bold mb-0">{{ $serial++ }}</p>
                         </div>
                       </td>
                       <td>
@@ -74,7 +75,9 @@
                         </a>
                       </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <p class="text-danger">No Data found</p>
+                    @endforelse
                   </tbody>
                 </table>
               </div>

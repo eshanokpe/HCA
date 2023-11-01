@@ -9,7 +9,7 @@
               </div>
             </div>
             @if (session('success'))
-                <div class="alert alert-success">
+                <div class="alert text-white mt-3 alert-success">
                     {{ session('success') }}
                 </div>
             @endif
@@ -34,11 +34,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                  @foreach ($residents as $resident)
+                    @php $serial = 1 @endphp
+                  @forelse ($residents as $resident)
                     <tr>
                       <td>
                         <div class="d-flex flex-column justify-content-center text-center">
-                            <p class="text-xs font-weight-bold mb-0">{{ $resident->id }}</p>
+                            <p class="text-xs font-weight-bold mb-0">{{ $serial++ }}</p>
                         </div>
                       </td>
                       <td>
@@ -79,12 +80,14 @@
                       
                       
                       <td class="align-middle">
-                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        <a href="{{ route('admin.editresidents', $resident->id) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                           Edit
                         </a>
                       </td>
                     </tr>
-                    @endforeach
+                    @empty
+                        <p class="text-danger">No Data found</p>
+                    @endforelse
                   </tbody>
                 </table>
               </div>

@@ -26,14 +26,22 @@ Route::middleware('admin')->group(function () {
     // Your admin-specific routes here
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin_hca', [App\Http\Controllers\AdminController::class, 'createhca'])->name('admin.createhca');
-    Route::get('/admin_hcaworkers', [App\Http\Controllers\AdminController::class, 'hcaworkers'])->name('admin.hcaworkers');
-    Route::post('/admin_hca_post', [App\Http\Controllers\AdminController::class, 'postcreatehca'])->name('admin.postcreatehca');
-    Route::get('/admin_nurse', [App\Http\Controllers\AdminController::class, 'createnurse'])->name('admin.createnurse');
-    Route::post('/admin_nurse_post', [App\Http\Controllers\AdminController::class, 'postcreatenurse'])->name('admin.postcreatenurse');
-    Route::get('/admin_nurses', [App\Http\Controllers\AdminController::class, 'nurses'])->name('admin.nurses');
+    Route::get('/admin/hcaworkers', [App\Http\Controllers\AdminController::class, 'hcaworkers'])->name('admin.hcaworkers');
+    Route::post('/admin/hca_post', [App\Http\Controllers\AdminController::class, 'postcreatehca'])->name('admin.postcreatehca');
+    Route::get('/admin/nurses', [App\Http\Controllers\AdminController::class, 'nurses'])->name('admin.nurses');
+    Route::get('/admin/nurse', [App\Http\Controllers\AdminController::class, 'createnurse'])->name('admin.createnurse');
+    Route::get('/admin/edit/nurse/{id}', [App\Http\Controllers\AdminController::class, 'editnurse'])->name('admin.editnurse');
+    Route::put('/admin/update/nurse/{nurse}', [App\Http\Controllers\AdminController::class, 'updatenurse'])->name('admin.updatenurse');
+
+    Route::post('/admin/nurse_post', [App\Http\Controllers\AdminController::class, 'postcreatenurse'])->name('admin.postcreatenurse');
+   
     Route::get('/admin_resident', [App\Http\Controllers\AdminController::class, 'createresident'])->name('admin.createresident');
     Route::post('/admin_resident_post', [App\Http\Controllers\AdminController::class, 'postcreateresident'])->name('admin.postcreateresident');
-    Route::get('/admin_residents', [App\Http\Controllers\AdminController::class, 'residents'])->name('admin.residents');
+    Route::get('/admin/residents', [App\Http\Controllers\AdminController::class, 'residents'])->name('admin.residents');
+    Route::get('/admin/edit/residents/{id}', [App\Http\Controllers\AdminController::class, 'editresidents'])->name('admin.editresidents');
+    Route::put('/admin/update/residents/{residents}', [App\Http\Controllers\AdminController::class, 'updateresidents'])->name('admin.updateresidents');
+
+
     Route::post('/admin_logout', [App\Http\Controllers\AdminController::class, 'logout'])->name('admin.logout');
     Route::post('/admin_login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
     Route::get('/shifts', [App\Http\Controllers\AdminController::class, 'shifts'])->name('admin.shifts');

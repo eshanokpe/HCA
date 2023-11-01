@@ -17,7 +17,7 @@ class Hca extends Authenticatable
      * @var array<int, string>
      */
     protected $table = 'hca_worker'; // Use square brackets to define an array with 'admin' attribute
-    protected $fillable = [
+    protected $fillable = [ 
         'username',
         'title',
         'fullname',

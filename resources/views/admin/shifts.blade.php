@@ -17,7 +17,7 @@
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                   <thead>
-                  <div class="d-flex justify-content-end text-end pe-4 mb-3">
+                  <div class="d-flex justify-content-end text-end pe-4 mb-3 mt-3">
                       <a href="{{route('admin.addShifts')}}" class="btn btn-primary"> 
                         <i class="fas fa-user-nurse"></i> +Add Shifts</a>
                   </div>
@@ -47,20 +47,86 @@
                       @endforeach
                   </div> --}}
                   <div class="col-lgp-12">
-                      <h2>All Days</h2>
-                      @foreach ($groupedSchedules as $day => $schedules)
+                      {{-- <h2>All Days</h2> --}}
+                      <table border="1" class="table  mb-0">
+                        <thead class=" ">
+                          <tr class="border">
+                            <th>All Days</th>
+                            <th></th>
+                            <th colspan="6" style="background-color: black; color:white; align-text:center" >HCA</th>
+                            <th colspan="2" style="background-color: pink; color:white; align-text:center">Nurse</th>
+                          </tr>
+                          <tr class="border">
+                            <th>Shift Type </th>
+                            <th>Date</th>
+                            <th colspan="2" class="border" >Floor 1</th>
+                            <th colspan="2" class="border">Floor 2</th>
+                            <th colspan="2" class="border">Floor 3</th>
+                            <th colspan="1"  class="border">Floor 1</th>
+                            <th colspan="1"  class="border">Floor 2</th>
+                            <th colspan="1"  class="border"><b>Action</b></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach ($schedules as $schedule)
+                          <tr> 
+                              @if ( $schedule->shift_type == 'Morning')
+                              <td> Morning</td>
+                              @else
+                             <td> Evening</td>
+                              @endif
+                            
+                             <td > {{ $schedule->date}}(Monday)  </td>
+                            <td colspan="2" class="border" > {{ $schedule->hca1}}, {{ $schedule->hca2}}</td>
+                            {{-- <td class="border" > {{ $schedule->hca2}} </td> --}}
+                            <td colspan="2" class="border"> {{ $schedule->hca3}}, {{ $schedule->hca4}} </td>
+                            {{-- <td> {{ $schedule->hca4}} </td> --}}
+                            <td colspan="2" class="border"> {{ $schedule->hca5}},  {{ $schedule->hca6}} </td>
+                            {{-- <td> {{ $schedule->hca6}} </td> --}}
+                            <td  class="border"> {{ $schedule->nurse1}} </td>
+                            <td  class="border"> {{ $schedule->nurse2}} </td>
+                            <td class="align-middle">
+                              <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                                class="btn btn-danger font-weight-bold">
+                                Delete
+                              </a>
+                            </td>
+                          </tr>
+                          {{-- <tr> 
+                            <td>   </td>
+                            <td> {{ $schedule->floor1}} </td>
+                            <td> {{ $schedule->floor2}} </td>
+                            <td> {{ $schedule->floor3}} </td>
+                          </tr> --}}
+                         
+                          <tr> 
+                         
+                          
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+
+                      {{-- @foreach ($groupedSchedules as $day => $schedules)
                           <h3>{{ ucfirst($day) }}</h3>
-                          <div class="row">
-                              @foreach ($schedules as $schedule)
-                                <div class="col-md-1">
-                                  <div class="d-flex align-items-center">
-                                      <p>{{ $schedule->staff_type }} {{ $schedule->shift_type }} {{ $schedule->start_time}} - {{$schedule->end_time }}</p>
-                                      <small></small>
-                                  </div>
+                          <div class="card">
+                            <div class="row">
+                              <div class="col-lg-1">
+                                <p><b> Shift Type <br>
+                                  Morning
+                                  Evening</b></p>
                               </div>
-                              @endforeach
+                                @foreach ($schedules as $schedule)
+                                  <div class="col-md-1">
+                                    <div class="d-flex align-items-center">
+                                        <p> {{ $schedule->staff_type }} <br> {{ $schedule->floor }} <br> {{ $schedule->shift_type }} </p>
+                                        <small></small>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
                           </div>
-                      @endforeach
+                      @endforeach --}}
                   </div>
                   <div class="">
 

@@ -13,7 +13,7 @@
         <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white active bg-gradient-primary" href="#">
+                    <a class="nav-link text-white active bg-gradient-primary" href=" {{ route('admin.index')}}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="fa fa-dashboard"></i>
                         </div>
@@ -46,7 +46,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="{{route('admin.residents')}}">
+                    <a class="nav-link text-white " href="{{route('admin.residents')}}" >
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="fa fa-users"></i>
                         </div>
@@ -96,13 +96,16 @@
                         <span class="nav-link-text ms-1">Settings</span> 
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white " href="#">
+                <li class="nav-item"> 
+                    <a class="nav-link text-white " href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-sign-out-alt"></i>
                         </div>
                         <span class="nav-link-text ms-1">Log Out</span>
                     </a>
+                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </li>
             </ul>
         </div>

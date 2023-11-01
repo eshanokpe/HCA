@@ -8,7 +8,7 @@
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
                                     <h5 class="text-white font-weight-bolder text-center mt-2 mb-0">Admin Login</h5>
-
+ 
                                 </div>
                             </div>
                             <div class="card-body">
@@ -20,18 +20,19 @@
                                 @endif
                                 <form action="{{ url('/admin_login') }}" method="POST" role="form" class="text-start">
                                     @csrf
+                                   
                                     <div class="input-group input-group-outline my-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control">
+                                        
+                                        <input type="email" name="email" class="form-control" placeholder="Email">
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
+
                                     <div class="input-group input-group-outline mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control">
+                                        <input type="password" name="password" class="form-control" placeholder="Password">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
