@@ -27,6 +27,17 @@
                             </ul>
                         </div>
                     @endif
+                    @if (isset($morningRegistrants) && $morningRegistrants->isNotEmpty())
+                        <div class="alert alert-warning">
+                            <p>Some individuals have already registered for the morning shift on this date:</p>
+                            {{-- <ul>
+                                @foreach ($morningRegistrants as $registrant)
+                                    <li>{{ $registrant->hca1 }}, {{ $registrant->hca2 }}, {{ $registrant->hca3 }}, {{ $registrant->hca4 }}, {{ $registrant->hca5 }}, {{ $registrant->hca6 }}</li>
+                                @endforeach
+                            </ul> --}}
+                        </div>
+                    @endif
+
                     <div class="card-body bg-white">
                         @error('worker_type' || 'staff_type_name')
                             <span class="text-danger">{{ $message }}</span>
@@ -52,6 +63,19 @@
                                         <input type="date" name="date" id="floor" class="form-select" required/>
                                     </div>
                                 </div>
+                                <script>
+                                    // Get a reference to the input element
+                                    const dateInput = document.getElementById("floor");
+                                
+                                    // Get the current date
+                                    const today = new Date();
+                                    
+                                    // Convert the current date to the format "YYYY-MM-DD" for comparison
+                                    const formattedToday = today.toISOString().slice(0, 10);
+                                
+                                    // Set the minimum attribute of the date input to today
+                                    dateInput.setAttribute("min", formattedToday);
+                                </script>
                                
                             </div>
                             <br>
@@ -269,7 +293,6 @@
                             
                             {{-- Four form --}}
                              
-                          
 
                             <div class="align-center">
                                 <div class="text-center">

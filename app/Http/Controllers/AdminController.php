@@ -269,6 +269,26 @@ class AdminController extends Controller
             $datas = array(
                 'name'=> $rules['hca1'], 
             );
+             // Check if the user has already registered for the morning shift on the same date
+            $morningShiftExists = Schedule::where('date', $rules['date'])
+            ->where('shift_type', 'Morning')
+            ->first();
+
+            if ($morningShiftExists && $rules['shift_type'] === 'Evening') {
+               
+                $morningRegistrants = Schedule::where('date', $rules['date'])
+                ->where('shift_type', 'Morning')
+               // ->where('staff_type_name', $staffType)
+                ->get();
+               // dd($morningRegistrants);
+                if ($morningRegistrants->isNotEmpty()) {
+                    $hcas = Hca::latest()->get();
+                    $nurses = Nurse::latest()->get();
+                    return view('admin.createShifts', compact('morningRegistrants','hcas', 'nurses'));
+                }
+                //return redirect()->back()->with('error', 'Some individual has already registered for the morning shift on this date.');
+            }
+
             // Check if a record for the same date and shift type already exists
             $existingRecord = Schedule::where('date', $rules['date'])
             ->where('shift_type', $rules['shift_type'])
@@ -276,7 +296,17 @@ class AdminController extends Controller
 
             if ($existingRecord) {
                 // A record for this date and shift type already exists
-                return redirect()->back()->with('error', 'A schedule already exists for this date and shift type.');
+                // Check if the current user has already registered for this shift
+                $userAlreadyRegistered = Schedule::where('date', $rules['date'])
+                ->where('shift_type', $rules['shift_type'])
+                ->first();
+
+                if ($userAlreadyRegistered) {
+                    return redirect()->back()->with('error', 'You have already registered for this shift.');
+                }
+                
+                // A record for this date and shift type already exists
+                //return redirect()->back()->with('error', 'A schedule already exists for this date and shift type.');
             }
 
             Schedule::create($request->all());
@@ -374,10 +404,7 @@ class AdminController extends Controller
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
                 });
-            }
-           
-
-       
+            }    
             
             //$email = new HCANotification($rules);
             //Mail::to('eshanokpe@gmail.com')->send($email);
@@ -394,10 +421,15 @@ class AdminController extends Controller
         //         ->withInput();
         // }
        
-        
-
         return redirect()->route('admin.shifts')->with('success', 'Schedule created successfully.');  
-          
+    }
+
+    public function getMorningRegistrants($date, $staffType)
+    {
+        return Schedule::where('date', $date)
+            ->where('shift_type', 'Morning')
+            ->where('staff_type_name', $staffType)
+            ->get();
     }
 
     public function addShifts(){
