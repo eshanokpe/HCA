@@ -76,7 +76,7 @@
                              <td> Evening</td>
                               @endif
                             
-                             <td > {{ $schedule->date}}(Monday)  </td>
+                             <td > {{ \Carbon\Carbon::parse($schedule->date)->format('M jS, Y (l)') }} </td>
                             <td colspan="2" class="border" > {{ $schedule->hca1}}, {{ $schedule->hca2}}</td>
                             {{-- <td class="border" > {{ $schedule->hca2}} </td> --}}
                             <td colspan="2" class="border"> {{ $schedule->hca3}}, {{ $schedule->hca4}} </td>

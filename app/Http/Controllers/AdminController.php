@@ -24,8 +24,10 @@ class AdminController extends Controller
         $totalNurse = Nurse::count();
         $totlaHca = Hca::count();
         $totlaShifts = Schedule::count();
+        $schedules = Schedule::latest()->get();
+        $groupedSchedules = $schedules->groupBy('day');
 
-        return view('admin.dashboard', compact('totalResidents', 'totalNurse', 'totlaHca', 'totlaShifts'));
+        return view('admin.dashboard', compact('totalResidents', 'totalNurse', 'totlaHca', 'totlaShifts','schedules'));
     }
     public function signin()
     {
@@ -268,6 +270,8 @@ class AdminController extends Controller
         try{
             $datas = array(
                 'name'=> $rules['hca1'], 
+                'date'=> $rules['date'], 
+                'shift_type'=> $rules['shift_type'], 
             );
              // Check if the user has already registered for the morning shift on the same date
             $morningShiftExists = Schedule::where('date', $rules['date'])
@@ -317,7 +321,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 // dd($email); // You can uncomment this line for debugging
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
                 });
@@ -328,7 +332,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
@@ -340,7 +344,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
@@ -352,7 +356,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
@@ -364,7 +368,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
@@ -375,7 +379,7 @@ class AdminController extends Controller
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
@@ -383,23 +387,23 @@ class AdminController extends Controller
             }
             
             //Nurse
-            $nurse1 = Hca::where('fullname', $rules['nurse1'])->get();
+            $nurse1 = Nurse::where('fullname', $rules['nurse1'])->get();
             foreach ($nurse1 as $hca) {
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
                 });
             }
-            $nurse2 = Hca::where('fullname', $rules['nurse2'])->get();
+            $nurse2 = Nurse::where('fullname', $rules['nurse2'])->get();
             foreach ($nurse2 as $hca) {
                 $email = $hca->email;
                 //dd($email);
                 Mail::send('emails.HCANotification', $datas, function ($message) use ($email) {
-                    $message->from('temilope15@gmail.com');
+                    $message->from('caredoctor001@gmail.com');
                    // $message->sender('web@firstmultiplemfbank.com', 'FMMFB IT');
                     $message->to($email);
                     $message->subject('Residential Healthcare and Carehome');
