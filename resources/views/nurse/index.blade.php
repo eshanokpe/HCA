@@ -14,15 +14,14 @@
                             <div class="card-body">
                                 <p>Enter your details to sign-in</p>
                                 @if ($errors->has('message'))
-                                    <div class="alert alert-danger">
+                                    <div class="alert text-white alert-danger">
                                         {{ $errors->first('message') }}
                                     </div>
                                 @endif
                                 <form action="{{ url('/nurse_login') }}" method="POST" role="form" class="text-start">
                                     @csrf
                                     <div class="input-group input-group-outline my-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control">
+                                        <input type="email" name="email" placeholder="Email" class="form-control">
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -30,8 +29,7 @@
                                         @enderror
                                     </div>
                                     <div class="input-group input-group-outline mb-3">
-                                        <label class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control">
+                                        <input type="password" name="password" placeholder="Password" class="form-control">
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

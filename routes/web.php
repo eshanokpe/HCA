@@ -21,8 +21,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Your admin routes here
     
 });
-Route::post('/admin_login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
-Route::get('/admin_signin', [App\Http\Controllers\AdminController::class, 'signin'])->name('admin.signin');
+
 Route::middleware('admin')->group(function () {
     // Your admin-specific routes here
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
@@ -70,10 +69,15 @@ Route::middleware('hca')->group(function () {
     // Route::get('/formsnck{id}', [App\Http\Controllers\HcaController::class, 'form_nightcheck'])->name('hca.formsnck');
 });
 
-Route::get('/nurse/signin', [App\Http\Controllers\NurseController::class, 'signin'])->name('nurse.signin');
+
+Route::post('/admin_login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
+Route::get('/admin_signin', [App\Http\Controllers\AdminController::class, 'signin'])->name('admin.signin');
 Route::post('/nurse_login', [App\Http\Controllers\NurseController::class, 'login'])->name('nurse.login');
+Route::get('/nurse/signin', [App\Http\Controllers\NurseController::class, 'signin'])->name('nurse.signin');
 Route::middleware('nurse')->group(function () {
+    // Your admin-specific routes here
     Route::get('/nurse', [App\Http\Controllers\NurseController::class, 'dashboard'])->name('nurse.index');
+    Route::post('/nurseLogout', [App\Http\Controllers\NurseController::class, 'logout'])->name('nurse.logout');
 });
 Route::post('/hca_login', [App\Http\Controllers\HcaController::class, 'login'])->name('hca.login');
 

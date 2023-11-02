@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Nurse;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Hash;
 
 class NurseController extends Controller
@@ -21,70 +22,73 @@ class NurseController extends Controller
     // Handle the admin login form submission
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        //dd($credentials );
-        if (Auth::guard('nurse')->attempt($credentials)) {
-            $user = Auth::guard('nurse')->user();
-            //dd($user );
-            // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-            if ($user->isNurse()) {
-                return redirect()->intended('/nurse');
-            } else {
-                Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
-                return redirect('/')->withErrors(['message' => 'Access denied.']);
-            }
-        }
+        // $credentials = $request->only('email', 'password');
+        // //dd($credentials );
+        // if (Auth::guard('nurse')->attempt($credentials)) {
+        //     $user = Auth::guard('nurse')->user();
+        //     //dd($user );
+        //     // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
+        //     if ($user->isNurse()) {
+        //         return redirect()->intended('/nurse');
+        //     } else {
+        //         Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
+        //         return redirect('/')->withErrors(['message' => 'Access denied.']);
+        //     }
+        // }
         
         $credentials = $request->only('email', 'password');
-        $hcadata = Nurse::where('email', $credentials['email'])->first();
+        $nursedata = Nurse::where('email', $credentials['email'])->first();
+       
         // Get the current time
         $currentTime = date('H:i');
         // Define shift timings
         $morningShiftStart = '08:00';
         $morningShiftEnd = '20:00';
         //dd($hcadata->fullname);
-        if ($hcadata) {
+        if ($nursedata) {
             // Retrieve the user's fullname from HCA model
-            $fullname = $hcadata->fullname;
+            $fullname = $nursedata->fullname;
+            //dd($fullname);
             // Check each column individually and set $hca accordingly
-            $hca1 = Schedule::where('hca1', $fullname)->first();
-            if ($hca1) {
-                $hca = $hca1->hca1;
-                $shiftType = $hca1->shift_type;
+            $nurse1 = Schedule::where('nurse1', $fullname)->first();
+            //dd($nurse);
+            if ($nurse1) {
+                $nurse = $nurse1->nurse1;
+                $shiftType = $nurse1->shift_type;
+               //dd($shiftType);
                 // Check access based on shift and time
                 if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                     // Allow access for morning shift
-                    //dd('Access Granted');
-                    if (Auth::guard('hca')->attempt($credentials)) {
-                        $user = Auth::guard('hca')->user();
+                   // dd('Access Granted1');
+                    if (Auth::guard('nurse')->attempt($credentials)) {
+                        $user = Auth::guard('nurse')->user();
                         //dd($user );
                         // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                        session(['user' => $user]);
-                        if ($user->isHca()) {
-                            return redirect()->intended('/hca');
+                        if ($user->isNurse()) {
+                            return redirect()->intended('/nurse');
                         } else {
-                            Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                            return redirect('/')->withErrors(['message' => 'Access denied.']);
+                            Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
+                            return back()->withErrors(['message' => 'Access denied.']);
                         }
                     }
                     
                 } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                     // Allow access for morning shift
-                    //dd('Access Granted');
-                    if (Auth::guard('hca')->attempt($credentials)) {
-                        $user = Auth::guard('hca')->user();
+                    //dd('Access denied');
+                    if (Auth::guard('nurse')->attempt($credentials)) {
+                        $user = Auth::guard('nurse')->user();
                         //dd($user );
                         // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                        session(['user' => $user]);
-                        if ($user->isHca()) {
-                            return redirect()->intended('/hca');
+                        if ($user->isNurse()) {
+                            return redirect()->intended('/nurse');
                         } else {
-                            Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                            return redirect('/')->withErrors(['message' => 'Access denied.']);
+                            Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
+                            return back()->withErrors(['message' => 'Access denied.']);
                         }
                     }
                 }else{
-                    return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
+                    //dd('Access Granted No');
+                    return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this date and time.']);
                 }
             } else{
                 $hca2 = Schedule::where('hca2', $fullname)->first();
@@ -96,156 +100,39 @@ class NurseController extends Controller
                     if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                         // Allow access for morning shift
                        //dd('Access Granted');
-                        if (Auth::guard('hca')->attempt($credentials)) {
-                            $user = Auth::guard('hca')->user();
+                       if (Auth::guard('nurse')->attempt($credentials)) {
+                            $user = Auth::guard('nurse')->user();
                             //dd($user );
                             // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                            session(['user' => $user]);
-                            if ($user->isHca()) {
-                                return redirect()->intended('/hca');
+                            if ($user->isNurse()) {
+                                return redirect()->intended('/nurse');
                             } else {
-                                Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                return redirect('/')->withErrors(['message' => 'Access denied.']);
+                                Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
+                                return back()->withErrors(['message' => 'Access denied.']);
                             }
                         }
                         
                     } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                         // Allow access for morning shift
                        // dd('Access Granted');
-                        if (Auth::guard('hca')->attempt($credentials)) {
-                            $user = Auth::guard('hca')->user();
+                        if (Auth::guard('nurse')->attempt($credentials)) {
+                            $user = Auth::guard('nurse')->user();
                             //dd($user );
                             // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                            session(['user' => $user]);
-                            if ($user->isHca()) {
-                                return redirect()->intended('/hca');
+                            if ($user->isNurse()) {
+                                return redirect()->intended('/nurse');
                             } else {
-                                Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                return redirect('/')->withErrors(['message' => 'Access denied.']);
+                                Auth::guard('nurse')->logout(); // Log out if user's role isn't allowed
+                                return back()->withErrors(['message' => 'Access denied.']);
                             }
                         }
                     }else{
-                        return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
+                       // dd('Access denied1');
+                        return back()->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
                     }
                 }else{
-                    $hca3 = Schedule::where('hca3', $fullname)->first();
-                    if ($hca3) {
-                        $hca = $hca3->hca3;
-                        $shiftType = $hca3->shift_type;
-                        // Check access based on shift and time
-                        if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
-                            // Allow access for morning shift
-                            dd('Access Granted');
-                            
-                        } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
-                            // Allow access for morning shift
-                            dd('Access Granted');
-                        }else{
-                            return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
-                        }
-                    }else{
-                        $hca4 = Schedule::where('hca4', $fullname)->first();
-                        if ($hca4) {
-                            $hca = $hca4->hca4;
-                            $shiftType = $hca4->shift_type;
-                            // Check access based on shift and time
-                            if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
-                                // Allow access for morning shift
-                                dd('Access Granted');
-                                
-                            } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
-                                // Allow access for morning shift
-                                dd('Access Granted');
-                            }else{
-                                return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
-                            }
-                        }else{
-                            $hca5 = Schedule::where('hca5', $fullname)->first();
-                            if ($hca5) {
-                                $hca = $hca5->hca5;
-                                $shiftType = $hca5->shift_type;
-                                // Check access based on shift and time
-                                if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
-                                    // Allow access for morning shift
-                                   // dd('Access Granted');
-                                    if (Auth::guard('hca')->attempt($credentials)) {
-                                        $user = Auth::guard('hca')->user();
-                                        //dd($user );
-                                        // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                                        session(['user' => $user]);
-                                        if ($user->isHca()) {
-                                            return redirect()->intended('/hca');
-                                        } else {
-                                            Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                            return redirect('/')->withErrors(['message' => 'Access denied.']);
-                                        }
-                                    }
-                                    
-                                } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
-                                    // Allow access for morning shift
-                                    //dd('Access Granted');
-                                    if (Auth::guard('hca')->attempt($credentials)) {
-                                        $user = Auth::guard('hca')->user();
-                                        //dd($user );
-                                        // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                                        session(['user' => $user]);
-                                        if ($user->isHca()) {
-                                            return redirect()->intended('/hca');
-                                        } else {
-                                            Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                            return redirect('/')->withErrors(['message' => 'Access denied.']);
-                                        }
-                                    }
-                                }else{
-                                    return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
-                                }
-                            }else{
-                                $hca6 = Schedule::where('hca6', $fullname)->first();
-                                if ($hca6) {
-                                    $hca = $hca6->hca6;
-                                    $shiftType = $hca1->shift_type;
-                                    // Check access based on shift and time
-                                    if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
-                                        // Allow access for morning shift
-                                        //dd('Access Granted');
-                                        if (Auth::guard('hca')->attempt($credentials)) {
-                                            $user = Auth::guard('hca')->user();
-                                            //dd($user );
-                                            // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                                            session(['user' => $user]);
-                                            if ($user->isHca()) {
-                                                return redirect()->intended('/hca');
-                                            } else {
-                                                Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                                return redirect('/')->withErrors(['message' => 'Access denied.']);
-                                            }
-                                        }
-                                        
-                                    } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
-                                        // Allow access for morning shift
-                                       // dd('Access Granted');
-                                       if (Auth::guard('hca')->attempt($credentials)) {
-                                            $user = Auth::guard('hca')->user();
-                                            //dd($user );
-                                            // Check if the authenticated user's role allows access (assuming role level <= 2 is admin)
-                                            session(['user' => $user]);
-                                            if ($user->isHca()) {
-                                                return redirect()->intended('/hca');
-                                            } else {
-                                                Auth::guard('hca')->logout(); // Log out if user's role isn't allowed
-                                                return redirect('/')->withErrors(['message' => 'Access denied.']);
-                                            }
-                                        }
-                                    }else{
-                                        return redirect('/')->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
-                                    }
-                                }else {
-                                    //dd('No matching schedule found for ' . $fullname);
-                                    return back()->withErrors(['message' => 'You have not been Schedule ' . $fullname]);
-                                }
-                            }
-                        }
-                    }
+                    //dd('Access denied2');
+                    return back()->withErrors(['message' => 'Access denied. You are not Schedule for this time.']);
                 }
             }
             // $hca now contains the matched schedule
@@ -288,6 +175,6 @@ class NurseController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/admin_signin');
+        return redirect('/nurse/signin');
     }
 }
