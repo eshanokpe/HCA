@@ -125,6 +125,8 @@ class HcaController extends Controller
         $hcadata = hca::where('email', $credentials['email'])->first();
         // Get the current time
         $currentTime = date('H:i');
+        //Get the current date
+        $currentDate = now()->format('Y-m-d');
         // Define shift timings
         $morningShiftStart = '08:00';
         $morningShiftEnd = '20:00';
@@ -137,8 +139,9 @@ class HcaController extends Controller
             if ($hca1) {
                 $hca = $hca1->hca1;
                 $shiftType = $hca1->shift_type;
+                $shiftDate = $hca1->date;
                 // Check access based on shift and time
-                if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                if ($shiftType === 'Morning' && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                     // Allow access for morning shift
                     //dd('Access Granted');
                     if (Auth::guard('hca')->attempt($credentials)) {
@@ -154,7 +157,7 @@ class HcaController extends Controller
                         }
                     }
                     
-                } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
+                } elseif ($shiftType === 'Evening' && $currentDate === $shiftDate && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                     // Allow access for morning shift
                     //dd('Access Granted');
                     if (Auth::guard('hca')->attempt($credentials)) {
@@ -179,7 +182,7 @@ class HcaController extends Controller
                     $shiftType = $hca2->shift_type;
                    
                     // Check access based on shift and time
-                    if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                    if ($shiftType === 'Morning'  && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                         // Allow access for morning shift
                        //dd('Access Granted');
                         if (Auth::guard('hca')->attempt($credentials)) {
@@ -195,7 +198,7 @@ class HcaController extends Controller
                             }
                         }
                         
-                    } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
+                    } elseif ($shiftType === 'Evening'  && $currentDate === $shiftDate && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                         // Allow access for morning shift
                        // dd('Access Granted');
                         if (Auth::guard('hca')->attempt($credentials)) {
@@ -219,7 +222,7 @@ class HcaController extends Controller
                         $hca = $hca3->hca3;
                         $shiftType = $hca3->shift_type;
                         // Check access based on shift and time
-                        if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                        if ($shiftType === 'Morning'  && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                             // Allow access for morning shift
                             dd('Access Granted');
                             
@@ -235,7 +238,7 @@ class HcaController extends Controller
                             $hca = $hca4->hca4;
                             $shiftType = $hca4->shift_type;
                             // Check access based on shift and time
-                            if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                            if ($shiftType === 'Morning'  && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                                 // Allow access for morning shift
                                 dd('Access Granted');
                                 
@@ -251,7 +254,7 @@ class HcaController extends Controller
                                 $hca = $hca5->hca5;
                                 $shiftType = $hca5->shift_type;
                                 // Check access based on shift and time
-                                if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                                if ($shiftType === 'Morning'  && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                                     // Allow access for morning shift
                                    // dd('Access Granted');
                                     if (Auth::guard('hca')->attempt($credentials)) {
@@ -267,7 +270,7 @@ class HcaController extends Controller
                                         }
                                     }
                                     
-                                } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
+                                } elseif ($shiftType === 'Evening'  && $currentDate === $shiftDate && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                                     // Allow access for morning shift
                                     //dd('Access Granted');
                                     if (Auth::guard('hca')->attempt($credentials)) {
@@ -291,7 +294,7 @@ class HcaController extends Controller
                                     $hca = $hca6->hca6;
                                     $shiftType = $hca1->shift_type;
                                     // Check access based on shift and time
-                                    if ($shiftType === 'Morning' && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
+                                    if ($shiftType === 'Morning'  && $currentDate === $shiftDate && $currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd) {
                                         // Allow access for morning shift
                                         //dd('Access Granted');
                                         if (Auth::guard('hca')->attempt($credentials)) {
@@ -307,7 +310,7 @@ class HcaController extends Controller
                                             }
                                         }
                                         
-                                    } elseif ($shiftType === 'Evening' && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
+                                    } elseif ($shiftType === 'Evening'  && $currentDate === $shiftDate && !($currentTime >= $morningShiftStart && $currentTime <= $morningShiftEnd)) {
                                         // Allow access for morning shift
                                        // dd('Access Granted');
                                        if (Auth::guard('hca')->attempt($credentials)) {
