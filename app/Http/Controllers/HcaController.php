@@ -8,7 +8,12 @@ use App\Models\Note;
 use App\Models\Forms;
 use App\Models\Residents;
 use App\Models\Schedule;
+use App\Models\HCAPasswordModel;
+use App\Mail\HCAEmailForgetPassword;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Mail; 
+use DB;
 
 class HcaController extends Controller
 {
@@ -367,9 +372,63 @@ class HcaController extends Controller
 
     }
 
- 
+    public function forgotpassword(){
+        return view('user.forgotpassword');
+    }
 
    
+    public function submitForgetPasswordForm(Request $request)
+    {
+       
+        $request->validate([
+            'email' => 'required|email|exists:hca_worker',
+        ]);
+       // dd('id');
+        $token = Str::random(64);
+
+            HCAPasswordModel::create([
+                'email' => $request->email, 
+                'token' => $token, 
+            ]);
+            $user = HCAPasswordModel::where('email',$request->email)->first();
+
+            $email = new HCAEmailForgetPassword($user);
+            Mail::to($user->email)->send($email);
+
+
+        return back()->with('success', 'We have e-mailed your password reset link!');
+    }   
+
+    public function showResetPasswordForm($token) { 
+        return view('user.passwordsreset', ['token' => $token]);
+    }
+
+    public function submitResetPasswordForm(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:hca_worker',
+            'password' => 'required|string|confirmed',
+            'password_confirmation' => 'required',
+        ]);
+        $updatePassword = DB::table('HCApassword_resets')
+                            ->where([
+                                'email' => $request->email,
+                                'token' => $request->token
+                            ])->first();
+        if(!$updatePassword){
+            return back()->with('error', 'Invalida token!');
+        }
+
+        $users = Hca::where('email', $request->email)
+                    ->update([
+                        'password' =>  Hash::make($request->password),
+                    ]);
+        
+        DB::table('HCApassword_resets')->where([
+            'email' => $request->email
+        ])->delete();
+        return redirect()->route('home')->with('success', 'Your password has been changed!');
+    }
+
 
     // Admin logout
     public function logout()

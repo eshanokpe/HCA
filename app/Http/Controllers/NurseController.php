@@ -142,10 +142,6 @@ class NurseController extends Controller
         return back()->withErrors(['message' => 'Invalid credentials']);
 
     }
-
-
- 
-
     
     public function postcreateresident(Request $request)
     {

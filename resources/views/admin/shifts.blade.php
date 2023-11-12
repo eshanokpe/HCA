@@ -13,6 +13,11 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if (session('error'))
+                <div class="alert alert-danger text-white mt-3">
+                    {{ session('error') }}
+                </div>
+            @endif
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
@@ -21,31 +26,12 @@
                       <a href="{{route('admin.addShifts')}}" class="btn btn-primary"> 
                         <i class="fas fa-user-nurse"></i> +Add Shifts</a>
                   </div>
-                    {{-- <tr>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">S/N</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Username</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fullname</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email Address</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Shift</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date created</th>
-                        <th class="text-secondary opacity-7"></th>
-                    </tr> --}}
                   </thead>
                   <tbody>
                  
                   </tbody>
                 </table>
                 <div class="row">
-                  {{-- <div class="col-md-3">
-                      <h2>Monday</h2>
-                      @foreach ($groupedSchedules['monday'] as $schedule)
-                          <p>{{ $schedule->shift_type }} - {{ $schedule->staff_type }}</p>
-                      @endforeach
-                      <h2>Tuesday</h2>
-                      @foreach ($groupedSchedules['tuesday'] as $schedule)
-                          <p>{{ $schedule->shift_type }} - {{ $schedule->staff_type }}</p>
-                      @endforeach
-                  </div> --}}
                   <div class="col-lgp-12">
                       {{-- <h2>All Days</h2> --}}
                       <table border="1" class="table  mb-0">
@@ -78,31 +64,21 @@
                             
                              <td > {{ \Carbon\Carbon::parse($schedule->date)->format('M jS, Y (l)') }} </td>
                             <td colspan="2" class="border" > {{ $schedule->hca1}}, {{ $schedule->hca2}}</td>
-                            {{-- <td class="border" > {{ $schedule->hca2}} </td> --}}
-                            <td colspan="2" class="border"> {{ $schedule->hca3}}, {{ $schedule->hca4}} </td>
-                            {{-- <td> {{ $schedule->hca4}} </td> --}}
+                            <td colspan="2" class="border"> {{ $schedule->hca3}}, {{ $schedule->hca4}} </td> 
                             <td colspan="2" class="border"> {{ $schedule->hca5}},  {{ $schedule->hca6}} </td>
-                            {{-- <td> {{ $schedule->hca6}} </td> --}}
                             <td  class="border"> {{ $schedule->nurse1}} </td>
                             <td  class="border"> {{ $schedule->nurse2}} </td>
                             <td class="align-middle">
-                              <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                              <a href="{{ route('admin.editshift', $schedule->id )}}" 
                                 class="btn btn-danger font-weight-bold">
                                 Edit
                               </a>
-                              <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                              <a href="{{ route('admin.deleteshift', $schedule->id )}}" 
                                 class="btn btn-danger font-weight-bold">
                                 Delete
                               </a>
                             </td>
                           </tr>
-                          {{-- <tr> 
-                            <td>   </td>
-                            <td> {{ $schedule->floor1}} </td>
-                            <td> {{ $schedule->floor2}} </td>
-                            <td> {{ $schedule->floor3}} </td>
-                          </tr> --}}
-                         
                           <tr> 
                          
                           
@@ -112,27 +88,6 @@
                           @endforelse
                         </tbody>
                       </table>
-
-                      {{-- @foreach ($groupedSchedules as $day => $schedules)
-                          <h3>{{ ucfirst($day) }}</h3>
-                          <div class="card">
-                            <div class="row">
-                              <div class="col-lg-1">
-                                <p><b> Shift Type <br>
-                                  Morning
-                                  Evening</b></p>
-                              </div>
-                                @foreach ($schedules as $schedule)
-                                  <div class="col-md-1">
-                                    <div class="d-flex align-items-center">
-                                        <p> {{ $schedule->staff_type }} <br> {{ $schedule->floor }} <br> {{ $schedule->shift_type }} </p>
-                                        <small></small>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
-                          </div>
-                      @endforeach --}}
                   </div>
                   <div class="">
 

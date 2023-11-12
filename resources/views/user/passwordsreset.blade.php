@@ -7,17 +7,12 @@
                         <div class="card z-index-0 fadeIn3 fadeInBottom">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-dark shadow-primary border-radius-lg py-3 pe-1">
-                                    <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">HCA Sign in</h4>
+                                    <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">HCA Reset Password</h4>
 
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p>Enter your details to sign-in</p>
-                                @if ($errors->has('message'))
-                                    <div class="alert text-white alert-danger">
-                                        {{ $errors->first('message') }}
-                                    </div>
-                                @endif
+                                <p>Enter your email </p>
                                 @if (session('success'))
                                     <div class="alert alert-success text-white mt-3">
                                         {{ session('success') }}
@@ -28,26 +23,33 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <form action="{{route('hca.login')}}" method="POST">
+                                <form action="{{route('hca.postresetpassword')}}" method="POST">
                                 @csrf
+                                    <input type="hidden" name="token" value="{{ $token }}">
                                     <div class="input-group input-group-outline my-3">
-                                        <input type="email" name="email" placeholder="Email address" class="form-control">
+                                        <input type="email" name="email" placeholder="Email address" class="form-control" required>
                                     </div>
-                                    <div class="input-group input-group-outline mb-3">
-                                        <input type="password" name="password" placeholder="Password" class="form-control">
+                                    @error('email')
+                                        <div class="text-danger text-sm mt-2">{{ $message }}</div>
+                                    @enderror
+                                    <div class="input-group input-group-outline my-3">
+                                        <input type="password" name="password" placeholder="Password" class="form-control" required>
                                     </div>
-                                    <div class="form-check form-switch d-flex align-items-center mb-3">
-                                        <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                                        <label class="form-check-label mb-0 ms-3" for="rememberMe">Remember me</label>
+                                    @error('password')
+                                        <div class="text-danger text-sm mt-2">{{ $message }}</div>
+                                    @enderror
+                                    <div class="input-group input-group-outline my-3">
+                                        <input type="password" name="password_confirmation" placeholder="Confirrm Password" class="form-control" required>
                                     </div>
+                                    @error('password_confirmation')
+                                        <div class="text-danger text-sm mt-2">{{ $message }}</div>
+                                    @enderror
                                     <div class="text-center">
-                                        <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign
-                                            in</button>
+                                        <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2"> Reset Password</button>
                                     </div>
                                     <p class="mt-4 text-sm text-center">
-
-                                        <a href="{{ route('hca.forgot-password') }}" class="text-primary text-dark ">Forgot
-                                            Password</a>
+                                        <a href="{{ route('home') }}" class="text-primary text-dark ">Sign
+                                            in</a>
                                     </p>
                                 </form>
                             </div>

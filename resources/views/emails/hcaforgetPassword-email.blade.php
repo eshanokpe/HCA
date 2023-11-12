@@ -2,9 +2,9 @@
 
 <span style="font-weight: bold;"> Hello!</span>
 
-You are receiving this email because we received a paaswprd rest request for your account.
+You are receiving this email because we received a paasword rest request for your account.
 
-@component('mail::button', ['url' => url('/reset-password/'.$email_token) ])
+@component('mail::button', ['url' => url('/hcareset-password/'.$email_token) ])
 Reset Password
 @endcomponent
 
@@ -16,5 +16,5 @@ Thank you for choosing Rabmot Licensing Agency. We look forward to serving you.
 
 Best regards,
 Management<br>
-Rabmot Licensing Agency 
+Residential Healthcare and Carehome  
 @endcomponent 

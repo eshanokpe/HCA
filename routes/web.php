@@ -14,9 +14,6 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () { 
-    return view('welcome');
-});
 Route::middleware(['auth', 'admin'])->group(function () {
     // Your admin routes here
     
@@ -45,6 +42,10 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin_logout', [App\Http\Controllers\AdminController::class, 'logout'])->name('admin.logout');
     Route::post('/admin_login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
     Route::get('/shifts', [App\Http\Controllers\AdminController::class, 'shifts'])->name('admin.shifts');
+    Route::get('/shifts/edit/{id}', [App\Http\Controllers\AdminController::class, 'editshift'])->name('admin.editshift');
+    Route::post('/shifts/update/{id}', [App\Http\Controllers\AdminController::class, 'updateshift'])->name('admin.updateshift');
+    Route::get('/shifts/delete/{id}', [App\Http\Controllers\AdminController::class, 'deleteshift'])->name('admin.deleteshift');
+
     Route::get('/addShifts', [AdminController::class, 'addshifts'])->name('admin.addShifts');
     Route::post('/addShifts', [AdminController::class, 'postcreateShift'])->name('admin.postcreateShift');
 
@@ -61,13 +62,12 @@ Route::middleware('hca')->group(function () {
     Route::post('/formbowel_post', [App\Http\Controllers\HcaController::class, 'postform_bowel'])->name('hca.postform_bowel');
     Route::get('/formfluid{id}', [App\Http\Controllers\HcaController::class, 'form_fluid'])->name('hca.formfluid');
     Route::post('/formfluid_post', [App\Http\Controllers\HcaController::class, 'postform_fluid'])->name('hca.postform_fluid');
-    // Route::get('/formsfld{id}', [App\Http\Controllers\HcaController::class, 'form_fluid'])->name('hca.formsfld');
-    // Route::get('/formsmed{id}', [App\Http\Controllers\HcaController::class, 'form_medication'])->name('hca.formsmed');
-    // Route::get('/formsbow{id}', [App\Http\Controllers\HcaController::class, 'form_bowel'])->name('hca.formsbow');
-    // Route::get('/formsrep{id}', [App\Http\Controllers\HcaController::class, 'form_repository'])->name('hca.formsrep');
-    // Route::get('/formsfod{id}', [App\Http\Controllers\HcaController::class, 'form_food'])->name('hca.formfods');
-    // Route::get('/formsnck{id}', [App\Http\Controllers\HcaController::class, 'form_nightcheck'])->name('hca.formsnck');
 });
+Route::get('/forgot-password', [App\Http\Controllers\HcaController::class, 'forgotpassword'])->name('hca.forgot-password');
+Route::post('/post-forgot-password', [App\Http\Controllers\HcaController::class, 'submitForgetPasswordForm'])->name('hca.postforgetpassword');
+Route::get('hcareset-password/{token}', [App\Http\Controllers\HcaController::class, 'showResetPasswordForm'])->name('hcareset.password.get');
+Route::post('hcareset-password/', [App\Http\Controllers\HcaController::class, 'submitResetPasswordForm'])->name('hca.postresetpassword');
+   
 
 
 Route::post('/admin_login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
@@ -82,5 +82,7 @@ Route::middleware('nurse')->group(function () {
 Route::post('/hca_login', [App\Http\Controllers\HcaController::class, 'login'])->name('hca.login');
 
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('reset-password/{token}', [App\Http\Controllers\HcaController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password/', [App\Http\Controllers\HcaController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+   

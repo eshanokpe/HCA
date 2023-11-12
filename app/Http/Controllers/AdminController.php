@@ -154,8 +154,6 @@ class AdminController extends Controller
 
     }
 
- 
-
     public function postcreatenurse(Request $request)
     {
         $dataform = $request->all();
@@ -184,8 +182,7 @@ class AdminController extends Controller
         // For example:
         return redirect()->route('admin.nurses')->with('success', 'New Nurse account created successfully!');
 
-    }
-    
+    }    
     
 
     public function postcreateresident(Request $request)
@@ -245,6 +242,70 @@ class AdminController extends Controller
         return view('admin.shifts', compact('groupedSchedules','schedules'));
     }
 
+    public function editshift($id){
+        
+        $hcas = Hca::latest()->get();
+        $nurses = Nurse::latest()->get();
+        $shifts = Schedule::find($id);
+        return view('admin.editshifts', compact('shifts','nurses','hcas'));
+    }
+    public function updateShift(Request $request, $id){
+        // Validate the form data
+        $request->validate([
+            'shift_type' => 'required|in:Morning,Evening', // Adjust validation rules as needed
+            'date' => 'required|date',
+            'hca1' => 'required',
+            'hca2' => 'required',
+            'floor1' => 'required',
+            'hca3' => 'required',
+            'hca4' => 'required',
+            'floor2' => 'required',
+            'hca5' => 'required',
+            'hca6' => 'required',
+            'floor3' => 'required',
+            'nurse1' => 'required',
+            'nursefloor1' => 'required',
+            'nurse2' => 'required',
+            'nursefloor2' => 'required',            
+        ]);
+        // Retrieve the shift record by ID
+        $shift = Schedule::find($id);
+
+        // Update the shift record with the form data
+        $shift->update([
+            'staff_type_name' => $request->input('staff_type_name'),
+            'shift_type' => $request->input('shift_type'),
+            'date' => $request->input('date'),
+            'hca1' => $request->input('hca1'),
+            'hca2' => $request->input('hca2'),
+            'floor1' => $request->input('floor1'),
+            'hca3' => $request->input('hca3'),
+            'hca4' => $request->input('hca4'),
+            'floor2' => $request->input('floor2'),
+            'hca5' => $request->input('hca5'),
+            'hca6' => $request->input('hca6'),
+            'floor3' => $request->input('floor3'),
+            'nurse1' => $request->input('nurse1'),
+            'nursefloor1' => $request->input('nursefloor1'),
+            'nurse2' => $request->input('nurse2'),
+            'nursefloor2' => $request->input('nursefloor2'),
+        ]);
+        // Redirect to a relevant page after updating
+        return redirect()->route('admin.shifts')->with('success', 'Shift updated Successfully');
+   
+    }
+
+    public function deleteshift($id){
+        
+        $shift = Schedule::find($id);
+        if ($shift) {
+            $shift->delete();
+            return redirect()->route('admin.shifts')->with('success', 'Shift deleted Successfully');
+        } else {
+            return redirect()->route('admin.shifts')->with('error', 'Shift not found');
+        }
+    }
+
     public function postcreateShift(Request $request){
         
         $data = $request->all(); // Assuming $request contains the input data.
@@ -282,15 +343,12 @@ class AdminController extends Controller
                
                 $morningRegistrants = Schedule::where('date', $rules['date'])
                 ->where('shift_type', 'Morning')
-               // ->where('staff_type_name', $staffType)
                 ->get();
-               // dd($morningRegistrants);
                 if ($morningRegistrants->isNotEmpty()) {
                     $hcas = Hca::latest()->get();
                     $nurses = Nurse::latest()->get();
                     return view('admin.createShifts', compact('morningRegistrants','hcas', 'nurses'));
                 }
-                //return redirect()->back()->with('error', 'Some individual has already registered for the morning shift on this date.');
             }
 
             // Check if a record for the same date and shift type already exists

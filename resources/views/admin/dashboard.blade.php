@@ -56,6 +56,11 @@
                       {{ session('success') }}
                   </div>
               @endif
+              @if (session('error'))
+                  <div class="alert alert-danger text-white mt-3">
+                      {{ session('error') }}
+                  </div>
+              @endif
               <div class="card-body px-0 pb-2">
                 <div class="table-responsive p-0">
                   <table class="table align-items-center mb-0">
@@ -129,11 +134,11 @@
                               <td  class="border"> {{ $schedule->nurse1}} </td>
                               <td  class="border"> {{ $schedule->nurse2}} </td>
                               <td class="align-middle">
-                                <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                                <a href="{{ route('admin.editshift', $schedule->id )}}" 
                                   class="btn btn-danger font-weight-bold">
                                   Edit
                                 </a>
-                                <a href="{{ route('admin.editnurse', $schedule->id )}}" 
+                                <a href="{{ route('admin.deleteshift', $schedule->id )}}" 
                                   class="btn btn-danger font-weight-bold">
                                   Delete
                                 </a>

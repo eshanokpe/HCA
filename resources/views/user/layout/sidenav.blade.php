@@ -70,7 +70,7 @@
                         </div>
                         <span class="nav-link-text ms-1">Log Out</span>
                     
-                    <form action="{{ route('hca.logout') }}" id="logout-form" method="POST">
+                                <form action="{{ route('hca.logout') }}" id="logout-form" method="POST">
                                     @csrf
                                 </form>
                             </a>
